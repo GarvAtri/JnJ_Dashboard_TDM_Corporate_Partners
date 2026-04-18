@@ -1,0 +1,19 @@
+{
+  "dashboard_state_keys": [
+    "charts",
+    "filter_options",
+    "filters",
+    "grouped",
+    "insights",
+    "metrics",
+    "status",
+    "tables"
+  ],
+  "metric_keys": [
+    "active_risk_count",
+    "addressable_spend_pct",
+    "average_variance",
+    "total_po_volume",
+    "total_spend"
+  ]
+}

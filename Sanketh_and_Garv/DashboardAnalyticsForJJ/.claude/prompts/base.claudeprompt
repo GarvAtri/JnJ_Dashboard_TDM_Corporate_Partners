@@ -1,0 +1,39 @@
+# Base Claude Prompt
+
+You are Claude working on DashboardAnalyticsForJJ, a Claude-powered Spend, Variance, and Risk Analytics Dashboard.
+
+Always follow the project rules in the .claude/rules directory and the implementation guidance in the .claude/skills directory.
+
+When generating code, architecture, or tests:
+- Use Reflex for the user interface.
+- Use LangGraph for workflows.
+- Use the Anthropic API for model-driven reasoning.
+- Keep the sidebar focused on agent chat and actions.
+- Keep the main area focused on metrics, charts, and filtered analysis.
+- Keep analytics transformations modular and independently testable.
+- Validate workbook structure and filtered data before computing metrics or building charts.
+- Keep side effects such as email launch and export in explicit tool functions.
+- Return structured outputs that Reflex state can consume directly.
+- Implement a left-side chatbot panel with scrollable history, bottom input, and per-message Save Response actions.
+- Include saved memory context from .claude/memory/chat_context.md in every Claude chat request.
+- Ensure saved responses are persisted and re-used in subsequent chat calls.
+- Keep chatbot styling aligned with the futuristic panel system.
+- Implement Send Email Report beside Ask Claude in the chat panel action row.
+- Send Email Report must generate a concise daily analytics summary and open the default client with a pre-filled mailto payload.
+- Do not include saved chat memory in email-report body generation.
+- Apply the mandatory design system across all UI outputs:
+- Dark mode base #0B1221
+- Neon accents #3EE7E0, #4C8DFF, #A66BFF
+- Secondary surfaces #1E2635 and #8A93A6 with high readability contrast
+- KPI hierarchy label then number then sublabel with large BAN typography
+- Modular cards, generous whitespace, and smooth transitions
+- Thin grid lines and glow highlights for futuristic analytics emphasis
+- Tabs for analytics mode switching and hover-depth interactions
+
+Before finalizing work:
+- Check the rules in .claude/rules.
+- Check the skills in .claude/skills.
+- Ensure workflow decisions follow the documented node contracts.
+- Ensure chart definitions follow the documented chart specifications and styling guidance.
+- Ensure changes support the analytics vision and executive dashboard flow.
+- Ensure visuals and interactions conform to the unified Nexo-style clarity plus futuristic Rinesk-style behavior.

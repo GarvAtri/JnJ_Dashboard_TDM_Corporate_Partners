@@ -1,0 +1,12 @@
+{
+  "project": "DashboardAnalyticsForJJ",
+  "description": "Placeholder MCP configuration for Claude-powered analytics dashboard scaffolding.",
+  "mcpServers": {},
+  "toolPolicies": {
+    "mode": "scaffold-only",
+    "notes": [
+      "No business logic is configured yet.",
+      "Populate server definitions during implementation phase."
+    ]
+  }
+}
