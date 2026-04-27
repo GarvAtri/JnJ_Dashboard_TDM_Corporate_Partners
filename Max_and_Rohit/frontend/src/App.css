@@ -74,6 +74,18 @@ html[data-theme="dark"] {
   overflow: hidden;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ── Header ──────────────────────────────────────────────────────────────────── */
 .header {
   background-color: var(--bg-header);
@@ -239,6 +251,7 @@ html[data-theme="dark"] {
   white-space: nowrap;
   user-select: none;
   line-height: 1;
+  border: none;
 }
 
 /* Divider between the two buttons */
@@ -249,6 +262,11 @@ html[data-theme="dark"] {
 .upload-btn:hover {
   color: var(--primary);
   background-color: var(--primary-muted);
+}
+
+.upload-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* File upload button — subtle blue tint on hover */
@@ -295,6 +313,20 @@ html[data-theme="dark"] .upload-btn--folder:hover {
 .theme-toggle:hover {
   color: var(--text-main);
   background: var(--bg-card-inner);
+}
+
+.theme-toggle:focus-visible,
+.search-form button:focus-visible,
+.upload-btn:focus-visible,
+.new-analysis-btn:focus-visible,
+.sidebar-load:focus-visible,
+.sidebar-delete:focus-visible,
+.followup-form button:focus-visible,
+.followup-input-wrapper:focus-within,
+.dataset-picker select:focus-visible,
+.search-form input:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 /* ── Body row: sidebar + main ────────────────────────────────────────────────── */
@@ -355,7 +387,6 @@ html[data-theme="dark"] .upload-btn--folder:hover {
   gap: 0.5rem;
   padding: 0.5625rem 0.5rem;
   border-radius: 0.375rem;
-  cursor: pointer;
   transition: background-color 0.15s;
   position: relative;
   min-width: 0;
@@ -364,6 +395,20 @@ html[data-theme="dark"] .upload-btn--folder:hover {
 .sidebar-item:hover             { background-color: var(--bg-card-inner); }
 .sidebar-item.active            { background-color: var(--primary-muted); border-left: 3px solid var(--primary); padding-left: calc(0.5rem - 3px); }
 .sidebar-item:hover .sidebar-delete { opacity: 1; }
+
+.sidebar-load {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
 
 .sidebar-item-icon {
   color: var(--text-muted);
@@ -378,7 +423,7 @@ html[data-theme="dark"] .upload-btn--folder:hover {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 0.1875rem;
 }
 
 .sidebar-item-q {
@@ -392,9 +437,38 @@ html[data-theme="dark"] .upload-btn--folder:hover {
 
 .sidebar-item.active .sidebar-item-q { color: var(--primary); font-weight: 500; }
 
+.sidebar-item-dataset {
+  font-size: 0.75rem;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.35;
+}
+
+.sidebar-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
 .sidebar-item-time {
   font-size: 0.6875rem;
   color: var(--text-muted);
+}
+
+.sidebar-item-alias {
+  max-width: 100%;
+  font-size: 0.6875rem;
+  color: var(--primary);
+  background: var(--primary-muted);
+  border-radius: 999px;
+  padding: 0.125rem 0.45rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar-delete {
@@ -416,6 +490,10 @@ html[data-theme="dark"] .upload-btn--folder:hover {
   background-color: var(--error-bg);
 }
 
+.sidebar-item:focus-within .sidebar-delete {
+  opacity: 1;
+}
+
 /* ── Main content ────────────────────────────────────────────────────────────── */
 .main-content {
   flex: 1;
@@ -425,6 +503,23 @@ html[data-theme="dark"] .upload-btn--folder:hover {
   flex-direction: column;
   min-width: 0;
   background-color: var(--bg-page);
+}
+
+.info-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--primary-muted);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-inner);
+  margin-bottom: 1rem;
+}
+
+.info-icon {
+  color: var(--primary);
+  flex-shrink: 0;
 }
 
 /* ── Dashboard grid (2-column: charts left, right panel right) ──────────────── */
@@ -438,11 +533,41 @@ html[data-theme="dark"] .upload-btn--folder:hover {
 }
 
 @media (max-width: 1024px) {
+  .body-row {
+    flex-direction: column;
+  }
   .charts-grid {
     grid-template-columns: 1fr;
   }
   .sidebar {
-    display: none;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+    overflow-x: auto;
+    flex-direction: row;
+    align-items: center;
+  }
+  .sidebar-list {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .sidebar-empty {
+    padding: 0;
+    white-space: nowrap;
+  }
+  .sidebar-item {
+    min-width: 220px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+  }
+  .new-analysis-btn {
+    margin: 0;
+    white-space: nowrap;
   }
   .dashboard-grid {
     flex-direction: column;
@@ -459,8 +584,15 @@ html[data-theme="dark"] .upload-btn--folder:hover {
 
 /* ── Header responsive: hide upload button labels at medium widths ─────────── */
 @media (max-width: 1100px) {
+  .header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
   .search-form {
-    max-width: 420px;
+    max-width: none;
+    width: 100%;
+    order: 3;
+    margin: 0;
   }
   .dataset-picker select {
     max-width: 140px;
@@ -474,10 +606,6 @@ html[data-theme="dark"] .upload-btn--folder:hover {
   }
   .upload-btn {
     padding: 0.375rem 0.5rem;
-  }
-  .search-form {
-    max-width: 280px;
-    margin: 0 0.625rem;
   }
   .logo-section h1 {
     display: none;
@@ -633,6 +761,17 @@ html[data-theme="dark"] .chart-card:hover {
   color: var(--text-muted);
 }
 
+.chart-loading-placeholder {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-inner);
+  background: var(--bg-card-inner);
+}
+
 /* ── Loading & welcome states ────────────────────────────────────────────────── */
 .loading-state, .welcome-state {
   display: flex;
@@ -646,6 +785,25 @@ html[data-theme="dark"] .chart-card:hover {
   border: 1px solid var(--border);
   box-shadow: var(--shadow-card);
   margin-top: 2rem;
+}
+
+.welcome-state {
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-state::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, var(--accent-glow), transparent 42%),
+    linear-gradient(135deg, transparent 0%, var(--primary-muted) 100%);
+  pointer-events: none;
+}
+
+.welcome-state > * {
+  position: relative;
 }
 
 .loading-icon {
@@ -662,14 +820,16 @@ html[data-theme="dark"] .chart-card:hover {
 }
 
 .welcome-state h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.75rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
 }
 
 .welcome-state p {
   color: var(--text-muted);
-  max-width: 500px;
+  max-width: 640px;
   margin-bottom: 2rem;
+  line-height: 1.7;
 }
 
 .suggestions {
@@ -680,19 +840,36 @@ html[data-theme="dark"] .chart-card:hover {
 }
 
 .suggestions button {
-  background-color: var(--bg-page);
+  background-color: rgb(255 255 255 / 0.72);
   border: 1px solid var(--border);
-  color: var(--text-muted);
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
+  color: var(--text-main);
+  padding: 0.875rem 1rem;
+  border-radius: 1.1rem;
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s;
+  max-width: 280px;
+  text-align: left;
+  line-height: 1.5;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.04);
 }
 
 .suggestions button:hover {
   border-color: var(--primary);
   color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.08);
+}
+
+.suggestions button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-color: var(--primary);
+}
+
+html[data-theme="dark"] .suggestions button {
+  background-color: rgb(23 23 23 / 0.82);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.18);
 }
 
 /* ── Spinner ─────────────────────────────────────────────────────────────────── */
@@ -703,6 +880,36 @@ html[data-theme="dark"] .chart-card:hover {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin {
+    animation: none;
+  }
+
+  .dashboard-grid,
+  .followup-section,
+  .dataset-context-card,
+  .loading-state,
+  .welcome-state {
+    animation: none;
+  }
+
+  .chart-card,
+  .theme-toggle,
+  .upload-btn,
+  .search-form button,
+  .new-analysis-btn,
+  .followup-form button,
+  .sidebar-load,
+  .sidebar-delete,
+  .suggestions button {
+    transition: none;
+  }
+
+  .chart-card:hover {
+    transform: none;
+  }
 }
 
 /* ── Error card ──────────────────────────────────────────────────────────────── */
@@ -991,6 +1198,46 @@ html[data-theme="dark"] .chart-card:hover {
   gap: 1.5rem;
 }
 
+.dataset-context-card {
+  background:
+    radial-gradient(circle at top right, var(--accent-glow), transparent 42%),
+    var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 1rem 1.25rem;
+}
+
+.dataset-context-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.dataset-context-title {
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--text-main);
+}
+
+.dataset-context-alias {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-card-inner);
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  max-width: 100%;
+}
+
 .followup-section {
   background: var(--bg-card);
   border-radius: var(--radius-card);
@@ -1098,6 +1345,10 @@ html[data-theme="dark"] .chart-card:hover {
   cursor: not-allowed;
 }
 
+.followup-form button:focus-visible {
+  outline-offset: 3px;
+}
+
 .followup-loading {
   padding: 1rem 0;
 }
@@ -1165,10 +1416,15 @@ html[data-theme="dark"] .chart-card:hover {
 @media (max-width: 640px) {
   .header {
     padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0.75rem;
   }
   .search-form {
-    max-width: 200px;
-    margin: 0 0.5rem;
+    order: 3;
+    max-width: none;
+    width: 100%;
+    margin: 0;
   }
   .search-form button {
     min-width: 70px;
@@ -1191,6 +1447,17 @@ html[data-theme="dark"] .chart-card:hover {
     width: 100%;
   }
   .dataset-picker {
-    display: none;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .dataset-picker select {
+    max-width: none;
+    width: 100%;
+    order: 2;
+  }
+  .upload-btn-group {
+    margin-left: auto;
   }
 }

@@ -1,7 +1,10 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  color-scheme: light;
+  background-color: #f5f5f5;
+  color: #1a1a1a;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -9,6 +12,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html[data-theme="dark"] {
+  color-scheme: dark;
+  background-color: #141414;
+  color: #e5e5e5;
+}
+
+html,
 body {
   margin: 0;
   min-width: 320px;
@@ -16,10 +26,38 @@ body {
   transition: background-color 0.2s, color 0.2s;
 }
 
+body {
+  background-color: inherit;
+  color: inherit;
+}
+
 #root {
   width: 100%;
+  min-height: 100vh;
 }
 
 * {
   box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
